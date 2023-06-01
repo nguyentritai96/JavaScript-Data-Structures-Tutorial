@@ -31,11 +31,14 @@ class BinarySearchTree {
         return root.left = newNode;
       } 
       
+      // Nếu có 1 vòng đệ quy; đi vào vòng đệ quy cho đến khi gặp được base case rồi thoát ra
+      // => tương tự async/await, cho đến khi gặp base case mới thoát ra => chạy code phía dưới
       return this.insertNode(root.left, newNode);
     } else {
       if (root.right === null) {
         return root.right = newNode;
       }  
+
       return this.insertNode(root.right, newNode);
     }
   }
@@ -94,15 +97,19 @@ class BinarySearchTree {
       }
 
       // have left and right
-      root.value = this.min(root.right);
-      root.right = this.deleteNode(root.right, root.value);
+      // bên trái không đổi, 
+      // min bên phải làm value
+      // xoá min value của nhánh bên phải (hiện tại đã gắn cho value của node)
+      const minRootRight = this.min(root.right)
+      root.value = minRootRight;
+      root.right = this.deleteNode(root.right, minRootRight);
     }
     return root;
   }
 
   // DFS: pre, in, post 
   preOrder(root) {
-    // root -> trái -> chạm đáy trái -> phải
+    // root -> trái -> chạm đáy trái -> phải -> phải
     if (root) {
       console.log(tag, root.value);
       this.preOrder(root.left);
@@ -111,7 +118,7 @@ class BinarySearchTree {
   }
 
   inOrder(root) {
-    // left -> node -> right 
+    // đáy trái left -> node -> right -> node lớn -> right
     if (root) {
       this.inOrder(root.left);
       console.log(root.value);
@@ -121,6 +128,7 @@ class BinarySearchTree {
 
   postOrder(root) {
     if (root) {
+      // left -> right - node
       this.postOrder(root.left);
       this.postOrder(root.right);
       console.log(root.value);
@@ -186,7 +194,7 @@ class BinarySearchTree {
 // TODO level order and delete
 
 const bst = new BinarySearchTree();
-console.log(bst.isEmpty());
+// console.log(bst.isEmpty());
 bst.insert(10);
 bst.insert(5);
 bst.insert(15);
@@ -195,14 +203,14 @@ bst.insert(7);
 bst.insert(13);
 bst.insert(17);
 bst.insert(2);
-// bst.deleteNode(bst.root, 7)
+bst.deleteNode(bst.root, 7)
 // console.log(bst.search(bst.root, 10));
 // console.log(bst.search(bst.root, 7));
-// bst.inOrder(bst.root);
+bst.inOrder(bst.root);
 // bst.preOrder(bst.root);
 // bst.postOrder(bst.root);
 // bst.levelOrder();
 // bst.printLevel(bst.root, 3);
 // console.log(bst.min(bst.root));
 // console.log(bst.max(bst.root));
-console.log(bst.height(bst.root));
+// console.log(bst.height(bst.root));
