@@ -47,17 +47,85 @@ class Graph {
       console.log(vertex + " -> " + [...this.adjacencyList[vertex]]);
     }
   }
+
+  dfs(startingNode){
+    const traverse = []
+    const visited = {};
+    this.DFSUtil(startingNode, visited, traverse);
+    console.log(traverse)
+  }
+
+  DFSUtil(vert, visited, traverse){
+      visited[vert] = true;
+      traverse.push(vert);
+
+      const get_List = this.adjacencyList[vert];
+
+      get_List.forEach((neigh) => {
+          if (!visited[neigh]) {
+              this.DFSUtil(neigh, visited, traverse);
+          }
+      })
+  }
+
+  // Đi theo hình zic zak từ phải đầu tiên
+  bfs(startingNode) {
+    const traverse = []
+    // create a visited object
+    const visited = {};
+ 
+    // Create an object for queue
+    const q = [];
+ 
+    // add the starting node to the queue
+    visited[startingNode] = true;
+    q.push(startingNode);
+ 
+    // loop until queue is empty
+    while (q.length) {
+        // get the element from the queue
+        const getQueueElement = q.shift();
+ 
+        // passing the current vertex to callback function
+        traverse.push(getQueueElement);
+ 
+        // get the adjacent list for current vertex
+        const get_List = this.adjacencyList[getQueueElement];
+ 
+        // loop through the list and add the element to the
+        // queue if it is not processed yet
+        get_List.forEach((neigh) => {
+          if (!visited[neigh]) {
+              visited[neigh] = true;
+              q.push(neigh);
+          }
+        })
+    }
+
+    console.log(traverse.join(' -> '))
+  }
+
+  
 }
 
 const graph = new Graph();
-graph.addVertex("A");
-graph.addVertex("B");
-graph.addVertex("C");
-graph.addEdge("A", "B");
-graph.addEdge("A", "C");
-graph.addEdge("B", "C");
-graph.display();
-graph.removeEdge("A", "B");
-graph.display();
-graph.removeVertex("A");
-graph.display();
+graph.addEdge('A', 'B');
+graph.addEdge('A', 'D');
+graph.addEdge('A', 'E');
+graph.addEdge('B', 'C');
+graph.addEdge('D', 'E');
+graph.addEdge('E', 'F');
+graph.addEdge('E', 'C');
+graph.addEdge('C', 'F');
+// console.log('---- Add Vertex ----')
+// graph.display();
+
+graph.dfs('A')
+
+// console.log('---- Remove Edge ----')
+// graph.removeEdge("A", "B");
+// graph.display();
+
+// console.log('---- Remove Vertex ----')
+// graph.removeVertex("A");
+// graph.display();
