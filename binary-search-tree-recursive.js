@@ -111,7 +111,7 @@ class BinarySearchTree {
   preOrder(root) {
     // root -> trái -> chạm đáy trái -> phải -> phải
     if (root) {
-      console.log(tag, root.value);
+      console.log(root.value);
       this.preOrder(root.left);
       this.preOrder(root.right);
     }
@@ -207,8 +207,8 @@ bst.insert(2);
 bst.deleteNode(bst.root, 7)
 // console.log(bst.search(bst.root, 10));
 // console.log(bst.search(bst.root, 7));
-bst.inOrder(bst.root);
-// bst.preOrder(bst.root);
+// bst.inOrder(bst.root);
+bst.preOrder(bst.root);
 // bst.postOrder(bst.root);
 // bst.levelOrder();
 // bst.printLevel(bst.root, 3);

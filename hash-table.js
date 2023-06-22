@@ -57,6 +57,16 @@ class HashTable {
       }
     }
   }
+
+  keys(){
+    const keysArray = [];
+    for (let i = 0; i < this.table.length; i++){
+      if(this.table[i]){
+        keysArray.push(this.table[i][0][0])
+      }
+    }
+    return keysArray;
+  }
 }
 
 const table = new HashTable(10);
@@ -69,3 +79,4 @@ table.set("name", "Diana");
 console.log(table.get("mane"));
 table.remove("name");
 table.display();
+console.log(table.keys())
