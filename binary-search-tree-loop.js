@@ -1,8 +1,8 @@
 class Node {
     constructor(value){
-      this.value = value;
       this.left = null;
       this.right = null;
+      this.value = value;
     }
   }
   
@@ -10,42 +10,32 @@ class Node {
     constructor(){
       this.root = null;
     }
-  
-    isEmpty() {
-      return this.root === null;
-    }
-  
     insert(value){
       const newNode = new Node(value);
-      if (this.isEmpty()) {
+      if (this.root === null) {
         this.root = newNode;
       } else {
-        this.insertNode(newNode);
-      }
-    }
-  
-    insertNode(newNode) {
-      let currentNode = this.root;
-      while(true){
-        if(newNode.value < currentNode.value){
-          //Left
-          if(!currentNode.left){
-            currentNode.left = newNode;
-            return this;
+        let currentNode = this.root;
+        while(true){
+          if(value < currentNode.value){
+            //Left
+            if(!currentNode.left){
+              currentNode.left = newNode;
+              return this;
+            }
+            currentNode = currentNode.left;
+          } else {
+            //Right
+            if(!currentNode.right){
+              currentNode.right = newNode;
+              return this;
+            } 
+            currentNode = currentNode.right;
           }
-          currentNode = currentNode.left;
-        } else {
-          //Right
-          if(!currentNode.right){
-            currentNode.right = newNode;
-            return this;
-          } 
-          currentNode = currentNode.right;
         }
       }
     }
-  
-    search(value){
+    lookup(value){
       if (!this.root) {
         return false;
       }
@@ -61,8 +51,14 @@ class Node {
       }
       return null
     }
-  
-    delete(value) {
+    
+    getHeight(node) {
+     if (node === null) return -1;
+    
+     return 1 + Math.max(this.getHeight(node.left), this.getHeight(node.right));
+    }
+    
+    remove(value) {
       if (!this.root) {
         return false;
       }
@@ -96,10 +92,10 @@ class Node {
           
           //Option 2: Right child which doesnt have a left child
           } else if (currentNode.right.left === null) {
-            currentNode.right.left = currentNode.left;
             if(parentNode === null) {
-              this.root = currentNode.right;
+              this.root = currentNode.left;
             } else {
+              currentNode.right.left = currentNode.left;
               
               //if parent > current, make right child of the left the parent
               if(currentNode.value < parentNode.value) {
@@ -141,25 +137,110 @@ class Node {
         }
       }
     }
+    BreadthFirstSearch(){
+      let currentNode = this.root;
+      let list = [];
+      let queue = [];
+      queue.push(currentNode);
   
-    traverse(node) {
-      const tree = { value: node.value };
-      console.log(node.value)
-      tree.left = node.left === null ? null : this.traverse(node.left);
-      tree.right = node.right === null ? null : this.traverse(node.right);
-      return tree;
+      while(queue.length > 0){
+        currentNode = queue.shift();
+        list.push(currentNode.value);
+        if(currentNode.left) {
+          queue.push(currentNode.left);
+        }
+        if(currentNode.right) {
+          queue.push(currentNode.right);
+        }
+      }
+      return list;
     }
+    BreadthFirstSearchR(queue, list) {
+      if (!queue.length) {
+        return list;
+      }
+      const currentNode = queue.shift();
+      list.push(currentNode.value);
+      
+      if (currentNode.left) {
+        queue.push(currentNode.left);
+      }
+      if (currentNode.right) {
+        queue.push(currentNode.right);
+      }
+      
+      return this.BreadthFirstSearchR(queue, list);
+    }
+    DFTPreOrder(currentNode, list) {
+      return traversePreOrder(this.root, []);
+    }
+    DFTPostOrder(){
+      return traversePostOrder(this.root, []); 
+    }
+    DFTInOrder(){
+      return traverseInOrder(this.root, []);
+    } 
   }
   
+  function traversePreOrder(node, list){
+    list.push(node.value);
+    if(node.left) {
+      traversePreOrder(node.left, list);
+    }
+    if(node.right) {
+      traversePreOrder(node.right, list);
+    }
+    return list;
+  }
+  
+  function traverseInOrder(node, list){
+    if(node.left) {
+      traverseInOrder(node.left, list);
+    }
+    list.push(node.value);
+    if(node.right) {
+      traverseInOrder(node.right, list);
+    }
+    return list;
+  }
+  
+  function traversePostOrder(node, list){
+    if(node.left) {
+      traversePostOrder(node.left, list);
+    }
+    if(node.right) {
+      traversePostOrder(node.right, list);
+    }
+    list.push(node.value);
+    return list;
+  }
+  
+  
   const tree = new BinarySearchTree();
-  tree.insert(10);
-  tree.insert(5);
-  tree.insert(15);
-  tree.insert(3);
-  tree.insert(7);
-  tree.insert(13);
-  tree.insert(17);
-  tree.insert(2);
-  tree.delete(7)
-  console.log(JSON.stringify(tree.traverse(tree.root), null, 4))
+  tree.insert(9)
+  tree.insert(4)
+  tree.insert(6)
+  tree.insert(20)
+  tree.insert(170)
+  tree.insert(15)
+  tree.insert(1)
+  // tree.remove(170);
+  // JSON.stringify(traverse(tree.root))
+  
+  console.log('BFS', tree.BreadthFirstSearch());
+  console.log('BFS', tree.BreadthFirstSearchR([tree.root], []))
+  console.log('DFSpre', tree.DFTPreOrder());
+  console.log('DFSin', tree.DFTInOrder());
+  console.log('DFSpost', tree.DFTPostOrder());
+  
+  //     9
+  //  4     20
+  //1  6  15  170
+  
+  function traverse(node) {
+    const tree = { value: node.value };
+    tree.left = node.left === null ? null : traverse(node.left);
+    tree.right = node.right === null ? null : traverse(node.right);
+    return tree;
+  }
   
