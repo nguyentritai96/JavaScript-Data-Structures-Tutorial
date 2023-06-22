@@ -1,8 +1,8 @@
 class Queue {
   constructor() {
     this.items = {};
-    this.front = 0;
-    this.rear = 0;
+    this.front = 0; // Đầu
+    this.rear = 0; // Đuôi
   }
 
   enqueue(element) {

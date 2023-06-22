@@ -1,10 +1,10 @@
 class CircularQueue {
   constructor(capacity) {
-    this.items = new Array(capacity);
+    this.capacity = capacity;
+    this.items = new Array(capacity); // Tại 1 thời điểm có tôi đa là Number('capacity') items
     this.rear = -1;
     this.front = -1;
     this.currentLength = 0;
-    this.capacity = capacity;
   }
 
   isFull() {
@@ -21,7 +21,7 @@ class CircularQueue {
 
   enqueue(item) {
     if (!this.isFull()) {
-      this.rear = (this.rear + 1) % this.capacity;
+      this.rear = (this.rear + 1) % this.capacity; // 0 <= this.rear <= capacity
       this.items[this.rear] = item;
       this.currentLength += 1;
       if (this.front === -1) {
@@ -36,7 +36,7 @@ class CircularQueue {
     }
     const item = this.items[this.front];
     this.items[this.front] = null;
-    this.front = (this.front + 1) % this.capacity;
+    this.front = (this.front + 1) % this.capacity; // 1 <= this.font <= capacity
     this.currentLength -= 1;
     if (this.isEmpty()) {
       this.front = -1;

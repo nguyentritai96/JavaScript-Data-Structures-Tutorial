@@ -1,6 +1,6 @@
 class Queue {
   constructor() {
-    this.items = [];
+    this.items = []; // Tại 1 thời điểm có thể có nhiều items
   }
 
   enqueue(element) {

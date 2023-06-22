@@ -32,3 +32,8 @@ class Stack {
     console.log(this.items);
   }
 }
+
+/*
+LIFO: vào sau ra trước
+Theo chiều bottom-up; dưới đáy, trên là đỉnh; chỉ làm việc với đỉnh
+*/
